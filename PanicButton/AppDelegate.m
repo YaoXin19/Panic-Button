@@ -1,18 +1,21 @@
+
 //
-//  AppDelegate.m
+//  AppController.m
 //  PanicButton
 //
-//  Created by Tim Jarratt on 3/22/13.
-//  Copyright (c) 2013 Tim Jarratt. All rights reserved.
+//  Created by Tim Jarratt in the future.
+//  Copyright 2012 General Linear Group. All rights reserved.
 //
 
 #import "AppDelegate.h"
 
 @implementation AppDelegate
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
-    // Insert code here to initialize your application
+#pragma mark - lifecycle
+- (void)awakeFromNib {
+    [NSApp activateIgnoringOtherApps:YES];
+    PanicRoom *room = [[PanicRoom alloc] init];
+    [room startup];
 }
 
 @end
