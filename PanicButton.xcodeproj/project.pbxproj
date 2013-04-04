@@ -122,11 +122,6 @@
 		F7F2B94116FD58B100800DA5 = {
 			isa = PBXGroup;
 			children = (
-				F7648A1F170D2C2F001357A0 /* CoreServices.framework */,
-				F7648A1D170D2BE6001357A0 /* libz.dylib */,
-				F7648A1B170D2BDA001357A0 /* CoreGraphics.framework */,
-				F7648A19170D2BAA001357A0 /* SystemConfiguration.framework */,
-				F7648A17170D2B9C001357A0 /* CFNetwork.framework */,
 				F7F2B95316FD58B100800DA5 /* PanicButton */,
 				F7F2B94C16FD58B100800DA5 /* Frameworks */,
 				F7F2B94B16FD58B100800DA5 /* Products */,
@@ -144,6 +139,11 @@
 		F7F2B94C16FD58B100800DA5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F7648A1F170D2C2F001357A0 /* CoreServices.framework */,
+				F7648A1D170D2BE6001357A0 /* libz.dylib */,
+				F7648A1B170D2BDA001357A0 /* CoreGraphics.framework */,
+				F7648A19170D2BAA001357A0 /* SystemConfiguration.framework */,
+				F7648A17170D2B9C001357A0 /* CFNetwork.framework */,
 				F75A98041708C38800B8F330 /* CoreAudio.framework */,
 				F75A98021708C37C00B8F330 /* IOKit.framework */,
 				F7F2B94D16FD58B100800DA5 /* Cocoa.framework */,

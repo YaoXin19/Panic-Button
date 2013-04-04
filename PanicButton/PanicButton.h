@@ -21,5 +21,6 @@
 
 - (void) speechSynthesizer: (NSSpeechSynthesizer *)synth didFinishSpeaking:(BOOL)finishedSpeaking;
 - (BOOL) was_pushed;
+- (void) speakString: (NSString *)message;
 
 @end

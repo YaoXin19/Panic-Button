@@ -32,7 +32,6 @@
         IOReturn ret = IOHIDDeviceGetReport(device, kIOHIDReportTypeFeature, 0, data, &length);
         if (ret == kIOReturnSuccess && data[0]) {
             self.push_count += 1;
-            [volume max];
             return YES;
         }
     }
@@ -40,14 +39,19 @@
     return NO;
 }
 
+- (void)speakString:(NSString *)string {
+    [volume max];
+    NSSpeechSynthesizer *synth = [NSSpeechSynthesizer new];
+    [synth stopSpeaking];
+    
+    [synth setDelegate: self];
+    [synth startSpeakingString:string];
+}
+
 # pragma mark Delegate methods
 - (void)speechSynthesizer:(NSSpeechSynthesizer *)synth didFinishSpeaking:(BOOL)finishedSpeaking {
     NSLog(@"returning volume to original level.\n");
     [volume original_volume];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    
 }
 
 @end

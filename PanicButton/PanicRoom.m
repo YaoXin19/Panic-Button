@@ -233,8 +233,9 @@ static void deviceMatchingCallback(void *context, IOReturn result, void *sender,
     [request setPostValue:@"git@github.com:nearbuy/storenet.git" forKey:@"repository"];
 }
 
-- (void) do_random_string {
-    NSLog(@"Sorry, I don't know any random strings");
+- (void) do_random_string {   
+    NSString *message = @"RED ALERT";
+    [panic_button speakString:message];
 }
 
 - (void) do_play_barbaric {
