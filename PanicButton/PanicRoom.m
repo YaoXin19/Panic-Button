@@ -79,15 +79,17 @@
         exit(1);
     }
     
+    int usage = primary_usage;
     int vendorID = vendor_id;
     int productID = product_id;
     CFNumberRef vendorRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &vendorID);
     CFNumberRef productRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &productID);
+    CFNumberRef usageRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &usage);
     
-    if (vendorRef && productRef) {
-        CFDictionaryAddValue(dict, CFSTR(kIOHIDVendorIDKey), vendorRef);
-        CFDictionaryAddValue(dict, CFSTR(kIOHIDProductIDKey), productRef);
-    }
+    CFDictionaryAddValue(dict, CFSTR(kIOHIDVendorIDKey), vendorRef);
+    CFDictionaryAddValue(dict, CFSTR(kIOHIDProductIDKey), productRef);
+    CFDictionaryAddValue(dict, CFSTR(kIOHIDPrimaryUsageKey), usageRef);
+
     IOHIDManagerSetDeviceMatching(manager, dict);
     
     CFRelease(vendorRef);
@@ -145,10 +147,6 @@ static void deviceMatchingCallback(void *context, IOReturn result, void *sender,
 }
 
 - (void) handle_matching_device:(IOHIDDeviceRef)device sender:(void *)sender result:(IOReturn)result {
-    if (panic_button != nil) {
-        [panic_button release];
-    }
-    
     panic_button = [[PanicButton alloc] init];
     panic_button.device = device;
     panic_button.volume = [[VolumeKnob alloc] init];
@@ -253,7 +251,7 @@ static void deviceMatchingCallback(void *context, IOReturn result, void *sender,
     NSUInteger index = arc4random() % size;
     NSString *message = [strings objectAtIndex: index];
     
-    [[panic_buttons objectAtIndex:0] speakString:message];
+    [panic_button speakString:message];
     [strings dealloc];
 }
 

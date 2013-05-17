@@ -21,6 +21,7 @@
 
 # define vendor_id 0x1130;
 # define product_id 0x0202;
+# define primary_usage 0;
 
 @interface PanicRoom : NSObject {
     NSStatusItem *statusItem;
