@@ -233,9 +233,28 @@ static void deviceMatchingCallback(void *context, IOReturn result, void *sender,
     [request setPostValue:@"git@github.com:nearbuy/storenet.git" forKey:@"repository"];
 }
 
-- (void) do_random_string {   
-    NSString *message = @"RED ALERT";
-    [panic_button speakString:message];
+- (NSArray *) random_strings_to_speak {
+    return [[NSArray alloc] initWithObjects:
+            @"RED ALERT",
+            @"Stop poking me!",
+            @"Spawn more overlords",
+            @"Wakka Wakka Wakka",
+            @"Wouldn't you rather play a nice game of screw hole?",
+            @"Funny joke",
+            @"Who wrote this stupid code? This is terrible!",
+            @"Computer! Copy all pattern buffers and activate system routine twelve. Authorization Barclay Omega 99",
+            nil
+            ];
+}
+
+- (void) do_random_string {
+    NSArray *strings = [self random_strings_to_speak];
+    NSUInteger size = [strings count];
+    NSUInteger index = arc4random() % size;
+    NSString *message = [strings objectAtIndex: index];
+    
+    [[panic_buttons objectAtIndex:0] speakString:message];
+    [strings dealloc];
 }
 
 - (void) do_play_barbaric {
