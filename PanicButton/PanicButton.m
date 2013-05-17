@@ -1,5 +1,5 @@
 //
-//  pPanicButton.m
+//  PanicButton.m
 //  PanicButton
 //
 //  Created by Jarratt Tim on 8/7/12.
@@ -29,6 +29,8 @@
     if (device && CFGetTypeID(device) == IOHIDDeviceGetTypeID()) {
         uint8_t data[8];
         CFIndex length = sizeof(data);
+        
+        
         IOReturn ret = IOHIDDeviceGetReport(device, kIOHIDReportTypeFeature, 0, data, &length);
         if (ret == kIOReturnSuccess && data[0]) {
             self.push_count += 1;

@@ -1,5 +1,5 @@
 //
-//  pPanicButton.h
+//  PanicButton.h
 //  PanicButton
 //
 //  Created by Jarratt Tim on 8/7/12.
