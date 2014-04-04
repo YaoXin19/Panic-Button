@@ -35,15 +35,5 @@
 
 // menu actions
 - (void) quit_application;
-- (void) open_doors;
-- (void) nateberg_berg;
-- (void) random_string;
-- (void) play_barbaric;
-
-// actual implementations
-- (void) do_open_doors;
-- (void) do_nateberg_berg;
-- (void) do_random_string;
-- (void) do_play_barbaric;
 
 @end

@@ -32,28 +32,12 @@
     
     NSMenuItem *actions_item = [[NSMenuItem alloc] initWithTitle:@"Actions" action:nil keyEquivalent:@""];
     NSMenuItem *quit_item = [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(quit_application) keyEquivalent:@""];
-    NSMenuItem *open_door_item = [[NSMenuItem alloc] initWithTitle:@"Open Doors" action:@selector(open_doors) keyEquivalent:@""];
-    NSMenuItem *nateberg_item = [[NSMenuItem alloc] initWithTitle:@"Nateberg-Berg" action:@selector(nateberg_berg) keyEquivalent:@""];
-    NSMenuItem *speak_random_string_item = [[NSMenuItem alloc] initWithTitle:@"Random String" action:@selector(random_string) keyEquivalent:@""];
-    NSMenuItem *play_sound_item = [[NSMenuItem alloc] initWithTitle:@"Play Sound" action:nil keyEquivalent:@""];
-    NSMenuItem *barbaric_sound = [[NSMenuItem alloc] initWithTitle:@"Barbaric" action:@selector(play_barbaric) keyEquivalent:@""];
-    
+
     [quit_item setTarget:self];
-    [open_door_item setTarget:self];
-    [nateberg_item setTarget:self];
-    [speak_random_string_item setTarget:self];
-    [barbaric_sound setTarget:self];
-    
-    NSMenu *sounds_submenu = [[[NSMenu alloc] init] autorelease];
-    [sounds_submenu addItem: barbaric_sound];
-    [play_sound_item setSubmenu:sounds_submenu];
-    
+
     NSMenu *actions_menu = [[[NSMenu alloc] init] autorelease];
-    [actions_menu addItem: open_door_item];
-    [actions_menu addItem: nateberg_item];
-    [actions_menu addItem: speak_random_string_item];
-    [actions_menu addItem: play_sound_item];
-    
+    // TODO: add actions from config parser
+
     [actions_item setSubmenu:actions_menu];
     
     [menu addItem:actions_item];
@@ -171,108 +155,6 @@ static void deviceMatchingCallback(void *context, IOReturn result, void *sender,
 - (void) quit_application {
     NSLog(@"Quit!");
     exit(0);
-}
-
-- (void) open_doors {
-    action = @selector(do_open_doors);
-}
-
-- (void) nateberg_berg {
-    action = @selector(do_nateberg_berg);
-}
-
-- (void) random_string {
-    action = @selector(do_random_string);
-}
-
-- (void) play_barbaric {
-    action = @selector(do_play_barbaric);
-}
-
-#pragma mark - Menu Action implementations
-- (void) do_open_doors {
-    NSLog(@"Open the pod bay doors, Hal.");
-    NSURL *auth_url = [NSURL URLWithString:@"https://door.nearbuysystems.com/auth"];
-    NSURL *door_url = [NSURL URLWithString:@"https://door.nearbuysystems.com/open"];
-    
-    NSError *error;
-    NSString *credentials = [NSString stringWithContentsOfFile:@"/etc/panic" encoding:NSUTF8StringEncoding error:&error];
-    NSArray *pieces = [[credentials stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsSeparatedByString:@":"];
-    
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:auth_url];
-    [request setPostValue:[pieces objectAtIndex:0] forKey:@"username"];
-    [request setPostValue:[pieces objectAtIndex:1] forKey:@"password"];
-    
-    [request startSynchronous];
-    NSLog(@"request: %@, code %d, body %@", [[request url] absoluteString], [request responseStatusCode], [request responseString]);
-    
-    ASIFormDataRequest *front_door = [ASIFormDataRequest requestWithURL:door_url];
-    [front_door setPostValue:@"Front Door" forKey:@"door"];
-    [front_door setDelegate:self];
-    [front_door startAsynchronous];
-    
-    ASIFormDataRequest *side_door = [ASIFormDataRequest requestWithURL:door_url];
-    [side_door setPostValue:@"Side Door" forKey:@"door"];
-    [side_door setDelegate:self];
-    [side_door startAsynchronous];
-}
-
-- (void) do_nateberg_berg {
-    NSLog(@"Berging current build in storenet");
-    NSURL *nateberg = [NSURL URLWithString:@"http://nateberg-1.corp.nearbuysystems.com:8080/build"];
-    
-    NSString *ref = @"0000";
-    NSString *branch = @"storenet-master";
-    
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:nateberg];
-    [request setRequestMethod:@"PUT"];
-    [request setPostValue:ref forKey:@"ref"];
-    [request setPostValue:branch forKey:@"name"];
-    [request setPostValue:@"git@github.com:nearbuy/storenet.git" forKey:@"repository"];
-}
-
-- (NSArray *) random_strings_to_speak {
-    return [[NSArray alloc] initWithObjects:
-            @"RED ALERT",
-            @"Stop poking me!",
-            @"Spawn more overlords",
-            @"Wakka Wakka Wakka",
-            @"Wouldn't you rather play a nice game of screw hole?",
-            @"Funny joke",
-            @"Who wrote this stupid code? This is terrible!",
-            @"Computer! Copy all pattern buffers and activate system routine twelve. Authorization Barclay Omega 99",
-            nil
-            ];
-}
-
-- (void) do_random_string {
-    NSArray *strings = [self random_strings_to_speak];
-    NSUInteger size = [strings count];
-    NSUInteger index = arc4random() % size;
-    NSString *message = [strings objectAtIndex: index];
-    
-    [panic_button speakString:message];
-    [strings dealloc];
-}
-
-- (void) do_play_barbaric {
-    NSLog(@"BAR__BARRRRIC");
-}
-
-#pragma mark - ASINetwork delegate methods
-- (void)requestFinished:(ASIHTTPRequest *)req {
-    NSString *url = [[req url] absoluteString];
-    
-    int statusCode = [req responseStatusCode];
-    NSString *responseBody = [req responseString];
-    NSString *statusMessage = [req responseStatusMessage];
-    NSLog(@"request: %@, got response code %d, message %@, body %@", url, statusCode, statusMessage, responseBody);
-}
-
-- (void)requestFailed:(ASIHTTPRequest *)request {
-    NSString *url = [[request url] absoluteString];
-    NSError *error = [request error];
-    NSLog(@"request %@ failed: %@", url, [error localizedDescription]);
 }
 
 @end
