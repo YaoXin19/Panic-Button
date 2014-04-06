@@ -39,6 +39,11 @@
         if (title != nil && !([title isEqualToString:@""])) {
             [self setTitle:title];
         }
+
+        NSArray *commands = [config valueForKey:@"commands"];
+        if (commands != nil) {
+            [self setCommands:commands];
+        }
     }
 }
 

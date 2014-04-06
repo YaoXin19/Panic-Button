@@ -36,7 +36,10 @@
     [quit_item setTarget:self];
 
     NSMenu *actions_menu = [[[NSMenu alloc] init] autorelease];
-    // TODO: add actions from config parser
+    [options.commands enumerateObjectsUsingBlock:^(NSString *cmd, NSUInteger index, BOOL *stop) {
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:cmd action:@selector(performCommand) keyEquivalent:@""];
+        [actions_menu addItem:item];
+    }];
 
     [actions_item setSubmenu:actions_menu];
     
@@ -155,6 +158,10 @@ static void deviceMatchingCallback(void *context, IOReturn result, void *sender,
 - (void) quit_application {
     NSLog(@"Quit!");
     exit(0);
+}
+
+- (void) performCommand {
+    NSLog(@"perform command not implemented. welp");
 }
 
 @end

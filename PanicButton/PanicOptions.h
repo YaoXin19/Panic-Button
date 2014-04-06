@@ -11,5 +11,6 @@
 @interface PanicOptions : NSObject
 
 @property (retain) NSString *title;
+@property (retain) NSArray *commands;
 
 @end
