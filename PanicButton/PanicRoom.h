@@ -7,6 +7,7 @@
 //
 
 #import "PanicButton.h"
+#import "PanicOptions.h"
 
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
@@ -24,9 +25,10 @@
 # define primary_usage 0;
 
 @interface PanicRoom : NSObject {
+    SEL action;
     NSStatusItem *statusItem;
     PanicButton *panic_button;
-    SEL action;
+    PanicOptions *options;
 }
 
 - (void) startup;

@@ -13,7 +13,7 @@
 #pragma mark - Lifecycle
 - (void) startup {
     [self create_status_bar];
-    action = @selector(do_open_doors);
+    options = [[PanicOptions alloc] init];
     [NSThread detachNewThreadSelector:@selector(start_runloop) toTarget:self withObject:nil];
 }
 
@@ -43,7 +43,7 @@
     [menu addItem:actions_item];
     [menu addItem:quit_item];
     
-    [statusItem setTitle:@"Panic!"];
+    [statusItem setTitle:[options title]];
     [statusItem setMenu:menu];
 }
 
