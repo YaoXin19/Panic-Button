@@ -8,6 +8,11 @@
 
 #import "PanicOptions.h"
 
+@interface PanicOptions()
+@property (strong, readwrite, retain) NSString *title;
+@property (strong, readwrite, retain) NSArray *commands;
+@end
+
 @implementation PanicOptions
 
 -(instancetype) init {
@@ -17,6 +22,7 @@
         NSArray *components = @[NSHomeDirectory(), @".panic", @"config.json"];
         NSString *pathToConfig = [NSString pathWithComponents:components];
         NSData *data = [NSData dataWithContentsOfFile:pathToConfig];
+
         [self readConfigJSON:data];
     }
 
@@ -28,10 +34,11 @@
 }
 
 -(void) readConfigJSON:(NSData *)data {
-    NSError *error;
-    id object = [NSJSONSerialization JSONObjectWithData:data options:8 error:&error];
+    id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 
-    if (error) { return; }
+    if (!object) {
+        return NSLog(@"Failed to read config. Bailing!!");
+    }
 
     if ([object isKindOfClass:[NSDictionary class]]) {
         NSDictionary *config = object;

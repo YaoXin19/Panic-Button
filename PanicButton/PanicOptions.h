@@ -10,7 +10,7 @@
 
 @interface PanicOptions : NSObject
 
-@property (retain) NSString *title;
-@property (retain) NSArray *commands;
+@property (strong, readonly, retain) NSString *title;
+@property (strong, readonly, retain) NSArray *commands;
 
 @end

@@ -11,9 +11,16 @@
 @implementation PanicRoom
 
 #pragma mark - Lifecycle
+- (instancetype) init {
+    if (self = [super init]) {
+        options = [[[PanicOptions alloc] init] retain];
+    }
+
+    return self;
+}
+
 - (void) startup {
     [self create_status_bar];
-    options = [[PanicOptions alloc] init];
     [NSThread detachNewThreadSelector:@selector(start_runloop) toTarget:self withObject:nil];
 }
 
