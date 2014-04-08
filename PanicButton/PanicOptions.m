@@ -34,10 +34,11 @@
 }
 
 -(void) readConfigJSON:(NSData *)data {
-    id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    NSError *error = nil;
+    id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
 
-    if (!object) {
-        return NSLog(@"Failed to read config. Bailing!!");
+    if (error != nil) {
+        return NSLog(@"Failed to read config (%@)... Bailing!!", error);
     }
 
     if ([object isKindOfClass:[NSDictionary class]]) {
