@@ -8,6 +8,7 @@
 
 #import "PanicButton.h"
 #import "PanicOptions.h"
+#import "panicCommand.h"
 
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
@@ -26,16 +27,20 @@
 
 @interface PanicRoom : NSObject {
     SEL action;
+    NSMenu *menu;
+    NSMenu *actionsMenu;
     NSStatusItem *statusItem;
-    PanicButton *panic_button;
+
+    PanicButton *panicButton;
     PanicOptions *options;
 }
 
 - (void) startup;
-- (void) create_status_bar;
-- (void) start_runloop;
+- (void) startRunloop;
+- (void) createStatusBar;
 
 // menu actions
-- (void) quit_application;
+- (IBAction) quitApplication:(id) sender;
+- (IBAction) performCommand:(id) sender;
 
 @end

@@ -48,8 +48,16 @@
             [self setTitle:title];
         }
 
-        NSArray *commands = [config valueForKey:@"commands"];
+        NSArray *rawCommands = [config valueForKey:@"commands"];
+        NSMutableArray *commands = [[NSMutableArray alloc] init];
         if (commands != nil) {
+            [rawCommands enumerateObjectsUsingBlock:^(NSDictionary *cmd, NSUInteger index, BOOL *stop) {
+                PanicCommand *newCommand = [[PanicCommand alloc] initWithDict:cmd];
+                [commands addObject:newCommand];
+
+                [newCommand release];
+            }];
+
             [self setCommands:commands];
         }
     }

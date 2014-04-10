@@ -20,8 +20,8 @@
 }
 
 - (void) startup {
-    [self create_status_bar];
-    [NSThread detachNewThreadSelector:@selector(start_runloop) toTarget:self withObject:nil];
+    [self createStatusBar];
+    [NSThread detachNewThreadSelector:@selector(startRunloop) toTarget:self withObject:nil];
 }
 
 - (void) dealloc {
@@ -30,35 +30,41 @@
 }
 
 #pragma mark - NSStatusItem Menu
-- (void) create_status_bar {
+- (void) createStatusBar {
     float width = 50.0;
     statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:width] retain];
     [statusItem setHighlightMode:YES];
     
-    NSMenu *menu = [[NSMenu alloc] init];
+    menu = [[NSMenu alloc] init];
     
     NSMenuItem *actions_item = [[NSMenuItem alloc] initWithTitle:@"Actions" action:nil keyEquivalent:@""];
-    NSMenuItem *quit_item = [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(quit_application) keyEquivalent:@""];
+    NSMenuItem *quit_item = [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(quitApplication:) keyEquivalent:@""];
 
     [quit_item setTarget:self];
 
-    NSMenu *actions_menu = [[[NSMenu alloc] init] autorelease];
-    [options.commands enumerateObjectsUsingBlock:^(NSString *cmd, NSUInteger index, BOOL *stop) {
-        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:cmd action:@selector(performCommand) keyEquivalent:@""];
-        [actions_menu addItem:item];
+    actionsMenu = [[[NSMenu alloc] init] autorelease];
+    [options.commands enumerateObjectsUsingBlock:^(PanicCommand *cmd, NSUInteger index, BOOL *stop) {
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:cmd.title action:@selector(performCommand:) keyEquivalent:@""];
+        [item setTarget:self];
+        [item setRepresentedObject:cmd.shellCommand];
+
+        [actionsMenu addItem:item];
+        [item release];
     }];
 
-    [actions_item setSubmenu:actions_menu];
+    [actions_item setSubmenu:actionsMenu];
     
     [menu addItem:actions_item];
     [menu addItem:quit_item];
     
     [statusItem setTitle:[options title]];
     [statusItem setMenu:menu];
+
+    [quit_item release];
 }
 
 #pragma mark - RunLoop
-- (void)start_runloop {
+- (void)startRunloop {
     NSLog(@"starting runloop");
         
     IOHIDManagerRef manager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDOptionsTypeNone);
@@ -89,6 +95,7 @@
     CFRelease(vendorRef);
     CFRelease(productRef);
     CFRelease(dict);
+    CFRelease(usageRef);
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         IOHIDManagerRegisterDeviceMatchingCallback(manager, deviceMatchingCallback, (void *)self);
@@ -99,8 +106,7 @@
         }
         CFRelease(manager);
     });
-    
-    NSLog(@"started cf runloop");
+
     CFRunLoopRun();
 }
 
@@ -111,7 +117,7 @@ static void timerCallback(CFRunLoopTimerRef timer, void *info) {
 }
 
 - (void) timer_callback {
-    if ([panic_button was_pushed]) {
+    if ([panicButton was_pushed]) {
         [self handle_current_action];
     }
 }
@@ -141,9 +147,9 @@ static void deviceMatchingCallback(void *context, IOReturn result, void *sender,
 }
 
 - (void) handle_matching_device:(IOHIDDeviceRef)device sender:(void *)sender result:(IOReturn)result {
-    panic_button = [[PanicButton alloc] init];
-    panic_button.device = device;
-    panic_button.volume = [[VolumeKnob alloc] init];
+    panicButton = [[PanicButton alloc] init];
+    panicButton.device = device;
+    panicButton.volume = [[VolumeKnob alloc] init];
 
     CFRunLoopTimerContext context;
     bzero(&context, sizeof(context));
@@ -156,19 +162,27 @@ static void deviceMatchingCallback(void *context, IOReturn result, void *sender,
         CFRelease(timer);
     }
     else {
-        NSLog(@"Could not initialize a CFTimer for a matching device.");
+        NSLog(@"PANIC: Could not initialize a CFTimer for a matching device.");
         exit(1);
     }
 }
 
 #pragma mark - Menu actions
-- (void) quit_application {
-    NSLog(@"Quit!");
+- (void) quitApplication:(id) sender {
+    NSLog(@"Goodbye!");
     exit(0);
 }
 
-- (void) performCommand {
-    NSLog(@"perform command not implemented. welp");
+- (void) performCommand:(id) sender {
+    NSString *fullCommand = [sender representedObject];
+    NSArray *args = @[@"-c", fullCommand];
+
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:@"/bin/bash"];
+    [task setArguments:args];
+
+    [task launch];
+    [task release];
 }
 
 @end
