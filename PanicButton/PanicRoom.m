@@ -113,16 +113,16 @@
 #pragma mark - Device Usage
 static void timerCallback(CFRunLoopTimerRef timer, void *info) {
     PanicRoom *room = (PanicRoom *) info;
-    [room timer_callback];
+    [room timerCallback];
 }
 
-- (void) timer_callback {
-    if ([panicButton was_pushed]) {
-        [self handle_current_action];
+- (void) timerCallback {
+    if ([panicButton wasPushed]) {
+        [self handleCurrentAction];
     }
 }
 
-- (void) handle_current_action {
+- (void) handleCurrentAction {
     [self performSelector:action];
 }
 
@@ -143,10 +143,10 @@ static void deviceRemovedCallback(void *context, IOReturn result, void *sender) 
 
 static void deviceMatchingCallback(void *context, IOReturn result, void *sender, IOHIDDeviceRef device) {
     PanicRoom *const this_class = (PanicRoom *const) context;
-    [this_class handle_matching_device:device sender:sender result:result];
+    [this_class handleMatchingDevice:device sender:sender result:result];
 }
 
-- (void) handle_matching_device:(IOHIDDeviceRef)device sender:(void *)sender result:(IOReturn)result {
+- (void) handleMatchingDevice:(IOHIDDeviceRef)device sender:(void *)sender result:(IOReturn)result {
     panicButton = [[PanicButton alloc] init];
     panicButton.device = device;
     panicButton.volume = [[VolumeKnob alloc] init];

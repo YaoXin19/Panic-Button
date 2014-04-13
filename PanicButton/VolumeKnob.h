@@ -15,9 +15,9 @@
     Float32 base_volume;
 }
 
--(void) find_default_device;
+-(void) findDefaultDevice;
 -(OSStatus) max;
--(OSStatus) original_volume;
+-(OSStatus) returnToOriginalVolume;
 
 @end
 

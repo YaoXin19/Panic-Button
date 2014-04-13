@@ -15,7 +15,7 @@
 @synthesize push_count;
 @synthesize volume;
 
-- (id)init
+- (id) init
 {
     self = [super init];
     if (self) {
@@ -25,7 +25,7 @@
     return self;
 }
 
--(BOOL)was_pushed {
+-(BOOL) wasPushed {
     if (device && CFGetTypeID(device) == IOHIDDeviceGetTypeID()) {
         uint8_t data[8];
         CFIndex length = sizeof(data);
@@ -53,7 +53,7 @@
 # pragma mark Delegate methods
 - (void)speechSynthesizer:(NSSpeechSynthesizer *)synth didFinishSpeaking:(BOOL)finishedSpeaking {
     NSLog(@"returning volume to original level.\n");
-    [volume original_volume];
+    [volume returnToOriginalVolume];
 }
 
 @end

@@ -10,17 +10,17 @@
 
 @implementation VolumeKnob
 
-- (id)init
+- (id) init
 {
     self = [super init];
     if (self) {
-        [self find_default_device];
+        [self findDefaultDevice];
     }
     
     return self;
 }
 
-- (void)find_default_device {
+- (void) findDefaultDevice {
     // TODO: AudioHardwareGetProperty is deprecated, use AudioObjectGetPropertyData
     AudioDeviceID device;
     UInt32 size = sizeof(AudioDeviceID);
@@ -31,7 +31,7 @@
 
 - (OSStatus) max {
     if (!default_device) {
-        [self find_default_device];
+        [self findDefaultDevice];
     }
     
     Float32 volume = (Float32)0.66;
@@ -50,7 +50,7 @@
     return AudioObjectSetPropertyData(default_device, &address, 0, NULL, size, &volume);
 }
 
-- (OSStatus) original_volume {
+- (OSStatus) returnToOriginalVolume {
     UInt32 size = sizeof(Float32);
     AudioObjectPropertyAddress addr = {
         kAudioDevicePropertyVolumeScalar,

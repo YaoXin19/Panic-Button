@@ -20,7 +20,7 @@
 @property NSInteger push_count;
 
 - (void) speechSynthesizer: (NSSpeechSynthesizer *)synth didFinishSpeaking:(BOOL)finishedSpeaking;
-- (BOOL) was_pushed;
+- (BOOL) wasPushed;
 - (void) speakString: (NSString *)message;
 
 @end
