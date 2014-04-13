@@ -13,7 +13,7 @@
 
 - (void)awakeFromNib {    
     room = [[PanicRoom alloc] init];
-    [room startup];
+    [room start];
 }
 
 @end
