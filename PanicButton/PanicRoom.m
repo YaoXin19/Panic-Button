@@ -70,16 +70,8 @@
     exit(0);
 }
 
-- (void) performCommand:(id) sender {
-    NSString *fullCommand = [sender representedObject];
-    NSArray *args = @[@"-c", fullCommand];
-
-    NSTask *task = [[NSTask alloc] init];
-    [task setLaunchPath:@"/bin/bash"];
-    [task setArguments:args];
-
-    [task launch];
-    [task release];
+- (void) setSelectedCommand:(id) sender {
+    [listener setTask:[sender representedObject]];
 }
 
 @end

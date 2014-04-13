@@ -26,6 +26,6 @@
 
 // menu actions
 - (IBAction) quitApplication:(id) sender;
-- (IBAction) performCommand:(id) sender;
+- (IBAction) setSelectedCommand:(id) sender;
 
 @end

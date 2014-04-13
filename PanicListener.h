@@ -26,6 +26,6 @@
     PanicButton *panicButton;
 }
 
-@property (readwrite) SEL action;
+@property (strong, readwrite, retain) NSString *task;
 
 @end

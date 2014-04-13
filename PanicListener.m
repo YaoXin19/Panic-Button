@@ -64,8 +64,19 @@ static void timerCallback(CFRunLoopTimerRef timer, void *info) {
 
 - (void) timerCallback {
     if ([panicButton wasPushed]) {
-        [self performSelector:self.action];
+        [self runTask];
     }
+}
+
+- (void) runTask {
+    NSArray *args = @[@"-c", self.task];
+
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:@"/bin/bash"];
+    [task setArguments:args];
+
+    [task launch];
+    [task release];
 }
 
 #pragma mark - Device Lifecycle
