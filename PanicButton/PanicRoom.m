@@ -45,7 +45,7 @@
 
     actionsMenu = [[[NSMenu alloc] init] autorelease];
     [options.commands enumerateObjectsUsingBlock:^(PanicCommand *cmd, NSUInteger index, BOOL *stop) {
-        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:cmd.title action:@selector(performCommand:) keyEquivalent:@""];
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:cmd.title action:@selector(setSelectedCommand:) keyEquivalent:@""];
         [item setTarget:self];
         [item setRepresentedObject:cmd.shellCommand];
 
