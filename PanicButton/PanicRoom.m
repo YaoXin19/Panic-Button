@@ -53,6 +53,10 @@
         [item release];
     }];
 
+    if (options.commands.count > 0) {
+        [self setSelectedCommand:[[actionsMenu itemArray] objectAtIndex:0]];
+    }
+
     [actions_item setSubmenu:actionsMenu];
     
     [menu addItem:actions_item];
