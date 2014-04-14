@@ -45,7 +45,7 @@
 
     actionsMenu = [[[NSMenu alloc] init] autorelease];
     [options.commands enumerateObjectsUsingBlock:^(PanicCommand *cmd, NSUInteger index, BOOL *stop) {
-        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:cmd.title action:@selector(setSelectedCommand:) keyEquivalent:@""];
+        NSMenuItem *item = [[PanicMenuItem alloc] initWithTitle:cmd.title action:@selector(setSelectedCommand:) keyEquivalent:@""];
         [item setTarget:self];
         [item setRepresentedObject:cmd.shellCommand];
 
@@ -71,7 +71,21 @@
 }
 
 - (void) setSelectedCommand:(id) sender {
+    [self revertAllCheckmarks];
+
+    NSMenuItem *item = sender;
+    NSString *checkmark = @"✓  ";
+
+    NSLog(@"setting selected command '%@'", item.title);
+    [item setTitle:[checkmark stringByAppendingString:item.title]];
     [listener setTask:[sender representedObject]];
+}
+
+#pragma mark - checkmarks
+- (void) revertAllCheckmarks {
+    [[actionsMenu itemArray] enumerateObjectsUsingBlock:^(PanicMenuItem *item, NSUInteger idx, BOOL *stop) {
+        [item reset];
+    }];
 }
 
 @end

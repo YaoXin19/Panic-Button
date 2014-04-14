@@ -9,6 +9,7 @@
 #import "PanicOptions.h"
 #import "PanicCommand.h"
 #import "PanicListener.h"
+#import "PanicMenuItem.h"
 
 #import <Cocoa/Cocoa.h>
 
