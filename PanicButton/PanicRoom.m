@@ -53,7 +53,15 @@
         [item release];
     }];
 
-    if (options.commands.count > 0) {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"selected_command"] != nil) {
+        NSInteger index = [defaults integerForKey:@"selected_command"];
+        if (index < options.commands.count) {
+            [self setSelectedCommand:[[actionsMenu itemArray] objectAtIndex:index]];
+        } else if (options.commands.count > 0) {
+            [self setSelectedCommand:[[actionsMenu itemArray] objectAtIndex:0]];
+        }
+    } else if (options.commands.count > 0) {
         [self setSelectedCommand:[[actionsMenu itemArray] objectAtIndex:0]];
     }
 
@@ -83,6 +91,19 @@
     NSLog(@"setting selected command '%@'", item.title);
     [item setTitle:[checkmark stringByAppendingString:item.title]];
     [listener setTask:[sender representedObject]];
+
+    __block NSInteger theIndex = -1;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [[actionsMenu itemArray] enumerateObjectsUsingBlock:^(NSMenuItem *obj, NSUInteger idx, BOOL *stop) {
+        if (obj == item) {
+            theIndex = idx;
+            *stop = YES;
+        }
+    }];
+
+    if (theIndex >= 0) {
+        [defaults setInteger:theIndex forKey:@"selected_command"];
+    }
 }
 
 #pragma mark - checkmarks
