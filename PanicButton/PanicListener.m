@@ -69,6 +69,13 @@ static void timerCallback(CFRunLoopTimerRef timer, void *info) {
 }
 
 - (void) runTask {
+    NSUserNotification *notification = [[NSUserNotification alloc] init];
+    [notification setTitle:self.task];
+    [notification setInformativeText:[NSString stringWithFormat:@"Running task %@", self.task]];
+    [notification setSoundName:@"Ping"];
+
+    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+
     NSArray *args = @[@"-c", self.task];
 
     NSTask *task = [[NSTask alloc] init];
