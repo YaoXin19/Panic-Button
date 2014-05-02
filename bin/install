@@ -27,7 +27,7 @@ if [ -e PanicButton.zip ]; then
   cd $TMP_DIR
 else
   cd $TMP_DIR
-  curl https://raw.github.com/tjarratt/Panic-Button/master/bin/PanicButton.zip > PanicButton.zip
+  curl -L https://raw.github.com/tjarratt/Panic-Button/master/bin/PanicButton.zip > PanicButton.zip
 fi
 
 unzip PanicButton.zip
